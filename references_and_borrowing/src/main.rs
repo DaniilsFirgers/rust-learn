@@ -5,7 +5,7 @@ fn main() {
 
     // mutable referensing
     let mut s = String::from("hello");
-    change(s)
+    change(&mut s);
     // one caveat
     // we CANNOT borrow s as mutable more than once ( use brackets to allow multiple mutable references)
 
@@ -16,7 +16,7 @@ fn main() {
     // we CANNOT have a mutable and immutable reference to the same value (if scopes overlap)
 
     //DANGLING pointers ->
-    let reference_to_nothing = dangle()
+    let reference_to_nothing = dangle();
 }
 // creation of reference is BORROWING
 fn calculate_length(s: &String) -> usize {
@@ -27,7 +27,7 @@ fn change(some_string: &mut String) {
     some_string.push_str(", world") // will n work only if we reference it as immutable value
 }
 
-fn dangle()->&String{
+fn dangle() -> String {
     let s = String::from("hello");
-    &s // we return a reference to the String, s
-}// Here, s goes out of scope, and is dropped. Its memory goes away.
+    s // we return a reference to the String, s
+} // Here, s goes out of scope, and is dropped. Its memory goes away.
