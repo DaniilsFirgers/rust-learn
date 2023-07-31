@@ -5,6 +5,7 @@ struct Rectangle {
     height: u32,
 }
 
+// you can include many methods and associated funcs in one impl block or create many impl blocks
 impl Rectangle {
     fn area(&self) -> u32 {
         self.width * self.height
