@@ -1,5 +1,8 @@
+use colored::*;
 use std::env;
 use std::process;
+
+const VALID_NUM_OF_ARGS: i32 = 3;
 
 fn main() {
     read_command_line()
@@ -7,9 +10,14 @@ fn main() {
 
 fn read_command_line() {
     let args: Vec<String> = env::args().collect();
+    let args_len: usize = args.len() - 1;
 
-    if args.len() != 4 {
-        eprintln!("Provided {} arguments instead of 3", args.len() - 1);
+    if args_len != VALID_NUM_OF_ARGS.try_into().unwrap() {
+        eprintln!(
+            "Provided {} arguments instead of {}",
+            args_len.to_string().red(),
+            VALID_NUM_OF_ARGS.to_string().green()
+        );
         process::exit(1);
     }
 
