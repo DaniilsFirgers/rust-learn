@@ -9,6 +9,7 @@ const VALID_NUM_OF_ARGS: i32 = 3;
 
 fn main() {
     let arguments = read_command_line();
+    println!("{:?}", arguments)
 }
 
 fn read_command_line() -> CommandLineOutput {
@@ -25,8 +26,8 @@ fn read_command_line() -> CommandLineOutput {
     }
 
     let amount = args[1].parse::<f64>().unwrap();
-    let first_currency = args[2].parse::<f64>().unwrap();
-    let second_currency = args[3].parse::<f64>().unwrap();
+    let first_currency = args[2].clone();
+    let second_currency = args[3].clone();
 
     CommandLineOutput {
         amount,
