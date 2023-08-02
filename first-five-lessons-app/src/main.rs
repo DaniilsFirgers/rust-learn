@@ -25,7 +25,13 @@ fn read_command_line() -> CommandLineOutput {
         process::exit(1);
     }
 
-    let amount = args[1].parse::<f64>().unwrap();
+    let amount = match args[1].parse::<f64>() {
+        Ok(value) => value,
+        Err(_) => {
+            eprintln!("Invalid amount provided. Please enter a valid number.");
+            process::exit(1);
+        }
+    };
     let first_currency = args[2].clone();
     let second_currency = args[3].clone();
 
