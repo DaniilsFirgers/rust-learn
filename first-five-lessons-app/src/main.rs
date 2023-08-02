@@ -2,10 +2,9 @@ mod structs;
 
 use colored::*;
 use std::env;
+use std::io;
 use std::process;
 use structs::CommandLineOutput;
-
-const VALID_NUM_OF_ARGS: i32 = 3;
 
 fn main() {
     let arguments = read_command_line();
@@ -13,31 +12,45 @@ fn main() {
 }
 
 fn read_command_line() -> CommandLineOutput {
-    let args: Vec<String> = env::args().collect();
-    let args_len: usize = args.len() - 1;
+    let mut input_amout = String::new();
+    let mut input_home_currency = String::new();
+    let mut input_foreign_currency = String::new();
 
-    if args_len as i32 != VALID_NUM_OF_ARGS {
-        eprintln!(
-            "Provided {} arguments instead of {}",
-            args_len.to_string().red(),
-            VALID_NUM_OF_ARGS.to_string().green()
-        );
-        process::exit(1);
+    println!("Enter the exchange amount: ");
+    match io::stdin().read_line(&mut input_amout) {
+        Ok(_) => {}
+        Err(err) => {
+            eprintln!("Failed to read input: {}", err);
+        }
     }
 
-    let amount = match args[1].parse::<f64>() {
+    let amount = match input_amout.trim().parse::<f64>() {
         Ok(value) => value,
         Err(_) => {
-            eprintln!("Invalid amount provided. Please enter a valid number.");
-            process::exit(1);
+            println!("Could not parse amount into numberic value");
+            0.0
         }
     };
-    let first_currency = args[2].clone();
-    let second_currency = args[3].clone();
+
+    println!("Enter the home currency: ");
+    match io::stdin().read_line(&mut input_home_currency) {
+        Ok(_) => {}
+        Err(err) => {
+            eprintln!("Failed to read home currency input: {}", err);
+        }
+    }
+
+    println!("Enter the foreign currency: ");
+    match io::stdin().read_line(&mut input_foreign_currency) {
+        Ok(_) => {}
+        Err(err) => {
+            eprintln!("Failed to read home foreign input: {}", err);
+        }
+    }
 
     CommandLineOutput {
         amount,
-        foreign_currency: first_currency,
-        home_currency: second_currency,
+        foreign_currency: input_foreign_currency.trim().to_string(),
+        home_currency: input_home_currency.trim().to_string(),
     }
 }
