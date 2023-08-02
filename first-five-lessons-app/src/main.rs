@@ -1,12 +1,15 @@
 mod structs;
+mod utils;
 
 use colored::*;
 use std::io;
 use structs::CommandLineOutput;
+use utils::ACCEPTED_CURRENCIES;
 
 fn main() {
     let arguments = read_command_line();
-    println!("{:?}", arguments)
+    println!("{:?}", arguments);
+    println!("{:?}", ACCEPTED_CURRENCIES);
 }
 
 fn read_command_line() -> CommandLineOutput {
