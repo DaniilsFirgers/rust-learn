@@ -1,9 +1,7 @@
 mod structs;
 
 use colored::*;
-use std::env;
 use std::io;
-use std::process;
 use structs::CommandLineOutput;
 
 fn main() {
@@ -12,45 +10,53 @@ fn main() {
 }
 
 fn read_command_line() -> CommandLineOutput {
-    let mut input_amout = String::new();
+    let mut input_amount = String::new();
     let mut input_home_currency = String::new();
     let mut input_foreign_currency = String::new();
-
-    println!("Enter the exchange amount: ");
-    match io::stdin().read_line(&mut input_amout) {
-        Ok(_) => {}
-        Err(err) => {
-            eprintln!("Failed to read input: {}", err);
+    loop {
+        println!("Enter the exchange amount: ");
+        input_amount.clear();
+        match io::stdin().read_line(&mut input_amount) {
+            Ok(_) => {}
+            Err(err) => {
+                eprintln!("Failed to read input: {}. Please try again!", err);
+                continue;
+            }
         }
-    }
 
-    let amount = match input_amout.trim().parse::<f64>() {
-        Ok(value) => value,
-        Err(_) => {
-            println!("Could not parse amount into numberic value");
-            0.0
+        match input_amount.trim().parse::<f64>() {
+            Ok(value) => {
+                // Store the amount in a local variable
+                let amount = value;
+
+                println!("Enter the home currency: ");
+                match io::stdin().read_line(&mut input_home_currency) {
+                    Ok(_) => {}
+                    Err(err) => {
+                        eprintln!("Failed to read home currency input: {}", err);
+                        continue; // Retry the loop for home_currency
+                    }
+                }
+
+                println!("Enter the foreign currency: ");
+                match io::stdin().read_line(&mut input_foreign_currency) {
+                    Ok(_) => {}
+                    Err(err) => {
+                        eprintln!("Failed to read home foreign input: {}", err);
+                        continue; // Retry the loop for foreign_currency
+                    }
+                }
+
+                // All inputs are successfully obtained, break the loop and return the result
+                break CommandLineOutput {
+                    amount,
+                    foreign_currency: input_foreign_currency.trim().to_string(),
+                    home_currency: input_home_currency.trim().to_string(),
+                };
+            }
+            Err(_) => {
+                println!("Could not parse amount into numeric value. Please try again!");
+            }
         }
-    };
-
-    println!("Enter the home currency: ");
-    match io::stdin().read_line(&mut input_home_currency) {
-        Ok(_) => {}
-        Err(err) => {
-            eprintln!("Failed to read home currency input: {}", err);
-        }
-    }
-
-    println!("Enter the foreign currency: ");
-    match io::stdin().read_line(&mut input_foreign_currency) {
-        Ok(_) => {}
-        Err(err) => {
-            eprintln!("Failed to read home foreign input: {}", err);
-        }
-    }
-
-    CommandLineOutput {
-        amount,
-        foreign_currency: input_foreign_currency.trim().to_string(),
-        home_currency: input_home_currency.trim().to_string(),
     }
 }
