@@ -1,3 +1,4 @@
+mod get_data;
 mod structs;
 mod utils;
 
@@ -8,6 +9,10 @@ use utils::ACCEPTED_CURRENCIES;
 
 fn main() {
     let arguments = read_command_line();
+
+    // make an http get request
+    // parse data
+    // oiut put the result
     println!("{:?}", arguments);
     println!("{:?}", ACCEPTED_CURRENCIES);
 }
