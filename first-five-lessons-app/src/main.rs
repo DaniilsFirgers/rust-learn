@@ -51,7 +51,18 @@ fn read_command_line() -> CommandLineOutput {
 
                 println!("Enter the foreign currency: ");
                 match io::stdin().read_line(&mut input_foreign_currency) {
-                    Ok(_) => {}
+                    Ok(_) => {
+                        if input_foreign_currency
+                            .trim()
+                            .to_uppercase()
+                            .eq(&input_home_currency.trim().to_uppercase())
+                        {
+                            println!(
+                                "Home currency is the same, please choose other foreign currency!"
+                            );
+                            continue;
+                        }
+                    }
                     Err(err) => {
                         eprintln!("Failed to read home foreign input: {}", err);
                         continue; // Retry the loop for foreign_currency
