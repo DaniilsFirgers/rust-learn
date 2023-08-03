@@ -49,6 +49,7 @@ fn read_command_line() -> CommandLineOutput {
 
     loop {
         println!("Enter the home currency: ");
+        input_home_currency.clear();
         match io::stdin().read_line(&mut input_home_currency) {
             Ok(_) => {}
             Err(err) => {
@@ -61,8 +62,14 @@ fn read_command_line() -> CommandLineOutput {
 
     loop {
         println!("Enter the foreign currency: ");
+        input_foreign_currency.clear();
         match io::stdin().read_line(&mut input_foreign_currency) {
             Ok(_) => {
+                println!(
+                    "{} - {}",
+                    input_foreign_currency.trim().to_uppercase(),
+                    input_home_currency.trim().to_uppercase()
+                );
                 if input_foreign_currency
                     .trim()
                     .to_uppercase()
