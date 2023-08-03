@@ -3,11 +3,13 @@ mod structs;
 mod utils;
 
 use colored::*;
+use get_data::get_coversion_data;
 use std::io;
 use structs::CommandLineOutput;
 use utils::ACCEPTED_CURRENCIES;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let arguments = read_command_line();
 
     // make an http get request
@@ -15,6 +17,7 @@ fn main() {
     // oiut put the result
     println!("{:?}", arguments);
     println!("{:?}", ACCEPTED_CURRENCIES);
+    get_coversion_data().await;
 }
 
 fn read_command_line() -> CommandLineOutput {
