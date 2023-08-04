@@ -15,9 +15,7 @@ async fn main() {
     // make an http get request
     // parse data
     // oiut put the result
-    println!("{:?}", arguments);
-    println!("{:?}", ACCEPTED_CURRENCIES);
-    get_coversion_data().await;
+    let _ = get_coversion_data().await;
 }
 
 fn read_command_line() -> CommandLineOutput {
@@ -51,7 +49,16 @@ fn read_command_line() -> CommandLineOutput {
         println!("Enter the home currency: ");
         input_home_currency.clear();
         match io::stdin().read_line(&mut input_home_currency) {
-            Ok(_) => {}
+            Ok(_) => {
+                let converted_curr = &&*input_home_currency.trim().to_uppercase();
+                if !ACCEPTED_CURRENCIES.contains(converted_curr) {
+                    println!(
+                        "Please choose a currency from the list: {:#?}",
+                        ACCEPTED_CURRENCIES
+                    );
+                    continue;
+                }
+            }
             Err(err) => {
                 eprintln!("Failed to read home currency input: {}", err);
                 continue; // Retry the loop for home_currency
@@ -65,16 +72,19 @@ fn read_command_line() -> CommandLineOutput {
         input_foreign_currency.clear();
         match io::stdin().read_line(&mut input_foreign_currency) {
             Ok(_) => {
+                let converted_curr = input_foreign_currency.trim().to_uppercase();
                 println!(
-                    "{} - {}",
-                    input_foreign_currency.trim().to_uppercase(),
-                    input_home_currency.trim().to_uppercase()
+                    "home: {}, foreign: {}",
+                    converted_curr, input_foreign_currency
                 );
-                if input_foreign_currency
-                    .trim()
-                    .to_uppercase()
-                    .eq(&input_home_currency.trim().to_uppercase())
-                {
+                if !ACCEPTED_CURRENCIES.contains(&&*converted_curr) {
+                    println!(
+                        "Please choose a currency from the list: {:#?}",
+                        ACCEPTED_CURRENCIES
+                    );
+                    continue;
+                }
+                if converted_curr.eq(&input_home_currency.trim().to_uppercase()) {
                     println!("Home currency is the same, please choose other foreign currency!");
                     continue;
                 }
