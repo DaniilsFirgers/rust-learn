@@ -32,7 +32,7 @@ async fn main() {
             arguments.foreign_currency
         );
     } else {
-        eprintln!("Error while fetching conversion data!");
+        eprintln!("Error while fetching conversion data.");
     }
 }
 
