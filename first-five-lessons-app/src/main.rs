@@ -10,6 +10,7 @@ use std::io;
 use structs::CommandLineOutput;
 use utils::ACCEPTED_CURRENCIES;
 
+const PRECISION: f64 = 100.0;
 #[tokio::main]
 async fn main() {
     let config = parse_config();
@@ -17,12 +18,21 @@ async fn main() {
 
     // parse data
     // oiut put the result
-    let conversion_result = get_coversion_data(config, arguments.home_currency).await;
+    let conversion_result = get_coversion_data(config, &arguments.home_currency).await;
 
     if let Ok(conversion) = conversion_result {
-        println!("{:#?}", conversion);
+        let exchange_rate = conversion.data[&arguments.foreign_currency];
+        let exchange_amount = exchange_rate * arguments.amount;
+
+        println!(
+            "You can exchange {:.2} {} to {:.2} {}",
+            (arguments.amount * PRECISION).round() / PRECISION,
+            arguments.home_currency,
+            (exchange_amount * PRECISION).round() / PRECISION,
+            arguments.foreign_currency
+        );
     } else {
-        eprintln!("Error fetching conversion data!");
+        eprintln!("Error while fetching conversion data!");
     }
 }
 
@@ -81,10 +91,7 @@ fn read_command_line() -> CommandLineOutput {
         match io::stdin().read_line(&mut input_foreign_currency) {
             Ok(_) => {
                 let converted_curr = input_foreign_currency.trim().to_uppercase();
-                println!(
-                    "home: {}, foreign: {}",
-                    converted_curr, input_foreign_currency
-                );
+
                 if !ACCEPTED_CURRENCIES.contains(&&*converted_curr) {
                     println!(
                         "Please choose a currency from the list: {:#?}",

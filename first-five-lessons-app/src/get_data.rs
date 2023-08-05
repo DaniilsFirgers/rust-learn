@@ -21,14 +21,14 @@ pub struct Config {
 
 pub async fn get_coversion_data(
     config: Data,
-    base_curency: String,
+    base_curency: &str,
 ) -> Result<CurrenciesApiResponse, reqwest::Error> {
     let api_key = config.config.api_key;
     let client = reqwest::Client::new();
 
     let mut params = HashMap::new();
     params.insert("apikey", api_key);
-    params.insert("base_currency", base_curency);
+    params.insert("base_currency", base_curency.to_string());
 
     let conversion = client
         .get("https://api.freecurrencyapi.com/v1/latest")
