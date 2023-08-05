@@ -4,18 +4,22 @@ mod utils;
 
 use colored::*;
 use get_data::get_coversion_data;
+use get_data::parse_config;
 use std::io;
 use structs::CommandLineOutput;
 use utils::ACCEPTED_CURRENCIES;
 
 #[tokio::main]
 async fn main() {
+    let config = parse_config();
+    println!("{:#?}", config);
     let arguments = read_command_line();
 
-    // make an http get request
     // parse data
     // oiut put the result
-    let _ = get_coversion_data().await;
+    if let Err(e) = get_coversion_data(config).await {
+        eprintln!("Error fetching conversion data: {}", e);
+    }
 }
 
 fn read_command_line() -> CommandLineOutput {

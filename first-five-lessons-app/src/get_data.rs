@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fs;
+use toml;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CurrenciesApiResponse {
@@ -7,9 +9,26 @@ pub struct CurrenciesApiResponse {
 }
 
 // get data from API
-pub async fn get_coversion_data() -> Result<(), reqwest::Error> {
-    let conversion = reqwest::Client::new()
-        .get("https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_hMe1XrPWnPH2QQSXRUh3E8QIvD8tjlYa4h8PdnPE")
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Data {
+    pub config: Config,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Config {
+    pub api_key: String,
+}
+
+pub async fn get_coversion_data(config: Data) -> Result<(), reqwest::Error> {
+    let api_key = config.config.api_key;
+    let client = reqwest::Client::new();
+
+    let mut params = HashMap::new();
+    params.insert("apikey", api_key);
+
+    let conversion = client
+        .get("https://api.freecurrencyapi.com/v1/latest")
+        .query(&params)
         .send()
         .await?
         .json::<CurrenciesApiResponse>()
@@ -17,4 +36,13 @@ pub async fn get_coversion_data() -> Result<(), reqwest::Error> {
     println!("{:#?}", conversion);
 
     Ok(())
+}
+
+pub fn parse_config() -> Data {
+    let config: Data = {
+        let config_test =
+            fs::read_to_string("config.toml").expect("Error while parsing config file.");
+        toml::from_str(&config_test).expect("Error")
+    };
+    config
 }
