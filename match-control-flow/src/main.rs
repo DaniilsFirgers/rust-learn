@@ -58,3 +58,12 @@ fn add_fancy_hat() {}
 fn remove_fancy_hat() {}
 fn move_player(num_spaces: u8) {}
 fn reroll() {}
+
+// if let syntax (less boilerplate code)
+
+let mut count = 0;
+if let Coin::Quarter(state) = coin {
+    println!("State quarter from {:?}!", state);
+} else {
+    count +=1;
+}
