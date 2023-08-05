@@ -19,7 +19,10 @@ pub struct Config {
     pub api_key: String,
 }
 
-pub async fn get_coversion_data(config: Data, base_curency: String) -> Result<(), reqwest::Error> {
+pub async fn get_coversion_data(
+    config: Data,
+    base_curency: String,
+) -> Result<CurrenciesApiResponse, reqwest::Error> {
     let api_key = config.config.api_key;
     let client = reqwest::Client::new();
 
@@ -34,9 +37,8 @@ pub async fn get_coversion_data(config: Data, base_curency: String) -> Result<()
         .await?
         .json::<CurrenciesApiResponse>()
         .await?;
-    println!("{:#?}", conversion);
 
-    Ok(())
+    Ok(conversion)
 }
 
 pub fn parse_config() -> Data {

@@ -3,6 +3,7 @@ mod structs;
 mod utils;
 
 use colored::*;
+
 use get_data::get_coversion_data;
 use get_data::parse_config;
 use std::io;
@@ -16,8 +17,12 @@ async fn main() {
 
     // parse data
     // oiut put the result
-    if let Err(e) = get_coversion_data(config, arguments.home_currency).await {
-        eprintln!("Error fetching conversion data: {}", e);
+    let conversion_result = get_coversion_data(config, arguments.home_currency).await;
+
+    if let Ok(conversion) = conversion_result {
+        println!("{:#?}", conversion);
+    } else {
+        eprintln!("Error fetching conversion data!");
     }
 }
 
