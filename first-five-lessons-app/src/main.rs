@@ -12,12 +12,11 @@ use utils::ACCEPTED_CURRENCIES;
 #[tokio::main]
 async fn main() {
     let config = parse_config();
-    println!("{:#?}", config);
     let arguments = read_command_line();
 
     // parse data
     // oiut put the result
-    if let Err(e) = get_coversion_data(config).await {
+    if let Err(e) = get_coversion_data(config, arguments.home_currency).await {
         eprintln!("Error fetching conversion data: {}", e);
     }
 }
@@ -101,8 +100,8 @@ fn read_command_line() -> CommandLineOutput {
         // All inputs are successfully obtained, break the loop and return the result
         break CommandLineOutput {
             amount: amount_numeric,
-            foreign_currency: input_foreign_currency.trim().to_string(),
-            home_currency: input_home_currency.trim().to_string(),
+            foreign_currency: input_foreign_currency.trim().to_uppercase(),
+            home_currency: input_home_currency.trim().to_uppercase(),
         };
     }
 }
