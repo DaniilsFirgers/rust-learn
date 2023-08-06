@@ -11,7 +11,7 @@ enum Coin {
 }
 
 fn main() {
-    let five = plus_one(5);
+    let five = plus_one(Some(5));
     let none = plus_one(None);
     println!("{} - {}", five, none);
 }
