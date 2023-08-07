@@ -1,3 +1,4 @@
+#[derive(Debug)]
 enum UsState {
     Alabama,
     Alaska,
@@ -24,20 +25,13 @@ fn main() {
     }
 
     // here we use _ as we do not bind to that value
-    match dice_roll_reroll {
+    match dice_roll {
         3 => add_fancy_hat(),
         7 => remove_fancy_hat(),
         _ => reroll(),
     }
 
     // if let syntax (less boilerplate code)
-
-    let mut count = 0;
-    if let Coin::Quarter(state) = coin {
-        println!("State quarter from {:?}!", state);
-    } else {
-        count += 1;
-    }
 }
 
 fn value_to_cents(coin: Coin) -> u8 {
@@ -50,8 +44,19 @@ fn value_to_cents(coin: Coin) -> u8 {
         Coin::Dime => 10,
         Coin::Quarter(state) => {
             println!("State quarter from {:#?}!", state);
+            20
         }
     }
+}
+
+fn value_to_cents_2(coin: Coin) -> u8 {
+    let mut count = 0;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:#?}!", state);
+    } else {
+        count += 1;
+    }
+    return count;
 }
 
 fn plus_one(x: Option<i32>) -> Option<i32> {
