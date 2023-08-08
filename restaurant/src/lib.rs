@@ -1,5 +1,15 @@
 use crate::back_of_house::Appetizer;
 
+// use as keyword to distinguish between the same names
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+// bring multiple items into scope
+use std::{cmp::Ordering, io};
+
+// top bring in all items into scope
+use std::collections::*;
+
 mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -48,6 +58,13 @@ mod back_of_house {
     fn cook_order() {}
 }
 
+// Use keyword (use it within the correct module)
+
+use crate::front_of_house::hosting;
+
+// now hosting is public and available to others by callin restaurant::hosting::add_to_waitlist()
+// pub use crate::front_of_house::hosting;
+
 pub fn eat_at_restaurant() {
     // Order a breakfast in the summer with Rye toast
     let mut meal = back_of_house::Breakfast::summer("Rye");
@@ -59,7 +76,7 @@ pub fn eat_at_restaurant() {
     crate::front_of_house::hosting::add_to_waitlist();
 
     // Relative path
-    front_of_house::hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
 
     // use of enums
 
@@ -67,4 +84,4 @@ pub fn eat_at_restaurant() {
     let order2 = back_of_house::Appetizer::Salad;
 }
 
-// structs and enums
+// Use keyword
